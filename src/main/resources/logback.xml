@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>
-        %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
-      </Pattern>
-    </layout>
-  </appender>
 
-  <logger name="org.springframework" level="debug" additivity="false">
-    <appender-ref ref="STDOUT"/>
-  </logger>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
 
-  <logger name="com.example" level="debug" additivity="false">
-    <appender-ref ref="STDOUT"/>
-  </logger>
+	<appender name="LOGSTASH_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter"> <level>info</level> 
+			</filter> -->
+		<file>target/spring-starter-logback.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>target/spring-starter-logback.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+			<maxHistory>1000</maxHistory>
+		</rollingPolicy>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+	</appender>
 
-  <root level="error">
-    <appender-ref ref="STDOUT"/>
-  </root>
+	<appender name="ASYNC"
+		class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
+		<appender-ref ref="LOGSTASH_FILE" />
+	</appender>
+
+	<appender name="LOGSTASH_UDP"
+		class="net.logstash.logback.appender.LogstashSocketAppender">
+		<host>elk</host>
+		<!-- port is optional (default is syslog port 514) -->
+		<port>5514</port>
+	</appender>
+
+	<!-- <appender name="LOGSTASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender"> 
+		<destination>elk:4560</destination> encoder is required <encoder class="net.logstash.logback.encoder.LogstashEncoder" 
+		/> </appender> -->
+
+	<logger name="com.example" level="DEBUG">
+		<appender-ref ref="ASYNC" />
+	</logger>
+
+	<logger name="com.example" level="TRACE">
+		<appender-ref ref="LOGSTASH_UDP" />
+	</logger>
+
+	<logger name="org.springframework" level="info" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="com.example" level="trace" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<root level="error">
+		<appender-ref ref="STDOUT" />
+	</root>
 </configuration>

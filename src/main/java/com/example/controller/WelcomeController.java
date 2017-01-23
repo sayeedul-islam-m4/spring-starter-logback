@@ -16,7 +16,11 @@ public class WelcomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String welcome(Model model) {
 
-		logger.debug("welcome() is executed, value {}", "example");
+		logger.info("Spring logback logger.");
+
+		logger.trace("Trace msg for logback");
+
+		logger.debug("welcome () is executed, value {}", "Sayeedul");
 
 		logger.error("This is Error message", new Exception("Testing"));
 
