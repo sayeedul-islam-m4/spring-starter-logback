@@ -26,12 +26,8 @@
 		<appender-ref ref="LOGSTASH_FILE" />
 	</appender>
 
-	<appender name="LOGSTASH_UDP"
-		class="net.logstash.logback.appender.LogstashSocketAppender">
-		<host>elk</host>
-		<!-- port is optional (default is syslog port 514) -->
-		<port>5514</port>
-	</appender>
+	<appender name="logstashUdp"
+		class="ch.qos.logback.ext.spring.DelegatingLogbackAppender" />
 
 	<!-- <appender name="LOGSTASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender"> 
 		<destination>elk:4560</destination> encoder is required <encoder class="net.logstash.logback.encoder.LogstashEncoder" 
@@ -42,7 +38,7 @@
 	</logger>
 
 	<logger name="com.example" level="TRACE">
-		<appender-ref ref="LOGSTASH_UDP" />
+		<appender-ref ref="logstashUdp" />
 	</logger>
 
 	<logger name="org.springframework" level="info" additivity="false">

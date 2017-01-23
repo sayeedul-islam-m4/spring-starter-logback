@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class WelcomeController {
@@ -20,9 +22,9 @@ public class WelcomeController {
 
 		logger.trace("Trace msg for logback");
 
-		logger.debug("welcome () is executed, value {}", "Sayeedul");
+		logger.debug("welcome () is executed, value {}", LocalDateTime.now().toString());
 
-		logger.error("This is Error message", new Exception("Testing"));
+//		logger.error("This is Error message", new Exception("Testing"));
 
 		model.addAttribute("msg", "Hello Spring MVC + Logback");
 		return "welcome";
