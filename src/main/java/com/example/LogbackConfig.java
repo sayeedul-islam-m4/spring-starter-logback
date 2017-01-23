@@ -3,12 +3,14 @@ package com.example;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.ext.spring.ApplicationContextHolder;
 import net.logstash.logback.appender.LogstashSocketAppender;
 
 @Configuration
+@Profile(value="elk")
 public class LogbackConfig {
 
 	@Bean
